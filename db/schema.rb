@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_18_170741) do
+ActiveRecord::Schema.define(version: 2022_01_19_023929) do
 
   create_table "appearances", force: :cascade do |t|
     t.integer "episode_id"
@@ -20,6 +20,11 @@ ActiveRecord::Schema.define(version: 2022_01_18_170741) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["episode_id"], name: "index_appearances_on_episode_id"
     t.index ["guest_id"], name: "index_appearances_on_guest_id"
+  end
+
+  create_table "episode_guests", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "episodes", force: :cascade do |t|
