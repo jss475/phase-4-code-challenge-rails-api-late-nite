@@ -1,27 +1,25 @@
 class EpisodesController < ApplicationController
-rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
-
-    def index 
-        render json: Episode.all 
+    def index
+        render json: Episode.all, status: :ok
     end
 
     def show
-        render json: find_episode, serializer: EpisodeGuestSerializer
+        episode = Episode.find_by(id: params[:id])
+        if episode
+            render json: episode, status: :ok, serializer: EpisodeGuestSerializer   
+        else
+            render json: {error: "Episode not found"}, status: :not_found
+        end
     end
 
     def destroy
-        find_episode.destroy
-        head :no_content
+        episode = Episode.find_by(id: params[:id])
+        if episode
+            episode.appearances.destroy_all
+            episode.destroy
+            render json: {}, status: 204
+        else
+            render json: {error: "Episode not found"}, status: :not_found
+        end
     end
-
-    private
-
-    def find_episode
-        Episode.find(params[:id])
-    end
-
-    def render_not_found
-        render json: { error: "Episode not found" }, status: :not_found
-    end
-
 end
